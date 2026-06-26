@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Aniversário 🎂</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rose:    #E8556D;
+    --blush:   #F9C8D2;
+    --cream:   #FFF8F5;
+    --plum:    #3D1A27;
+    --gold:    #F2C94C;
+    --soft:    #F4E0E5;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--cream);
+    color: var(--plum);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── SCREENS ── */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 40px 24px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    animation: fadeIn .6s ease;
+  }
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 7vw, 3.8rem);
+    line-height: 1.15;
+    color: var(--plum);
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 5vw, 2.6rem);
+    line-height: 1.2;
+  }
+  p {
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+    line-height: 1.7;
+    max-width: 520px;
+    opacity: .85;
+  }
+  .eyebrow {
+    font-size: .78rem;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 12px;
+  }
+
+  /* ── BUTTON ── */
+  .btn {
+    margin-top: 32px;
+    padding: 14px 36px;
+    background: var(--rose);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 20px rgba(232,85,109,.35);
+  }
+  .btn:hover  { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,85,109,.4); }
+  .btn:active { transform: translateY(0); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--rose);
+    border: 2px solid var(--rose);
+    box-shadow: none;
+  }
+
+  /* ── HEARTS BG ── */
+  .hearts-bg {
+    position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+  }
+  .heart-float {
+    position: absolute;
+    bottom: -60px;
+    font-size: 1.4rem;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { opacity: 0;   transform: translateY(0)   rotate(0deg); }
+    10%  { opacity: .7; }
+    90%  { opacity: .4; }
+    100% { opacity: 0;   transform: translateY(-110vh) rotate(20deg); }
+  }
+
+  /* ── SCREEN 1 – INTRO ── */
+  #s1 { background: var(--cream); }
+  .big-emoji { font-size: 4.5rem; margin-bottom: 20px; }
+
+  /* ── SCREEN 2 – QUESTION ── */
+  #s2 { background: var(--soft); }
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 28px;
+    max-width: 480px;
+  }
+  .opt-btn {
+    padding: 12px 24px;
+    border: 2px solid var(--rose);
+    background: #fff;
+    color: var(--plum);
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .opt-btn:hover, .opt-btn.selected {
+    background: var(--rose);
+    color: #fff;
+  }
+
+  /* ── SCREEN 3 – MEMORY ── */
+  #s3 { background: var(--cream); }
+  .polaroid-wrap {
+    display: flex; flex-wrap: wrap; gap: 20px;
+    justify-content: center; margin: 32px 0;
+  }
+  .polaroid {
+    width: 160px; padding: 14px 14px 36px;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(0,0,0,.1);
+    transform: rotate(-3deg);
+    transition: transform .2s;
+    cursor: default;
+  }
+  .polaroid:nth-child(2) { transform: rotate(2deg); }
+  .polaroid:nth-child(3) { transform: rotate(-1.5deg); }
+  .polaroid:hover { transform: rotate(0) scale(1.05); }
+  .polaroid .face {
+    font-size: 2.8rem;
+    height: 110px; display: flex; align-items: center; justify-content: center;
+    background: var(--soft);
+    border-radius: 2px;
+  }
+  .polaroid .caption {
+    margin-top: 10px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: .82rem;
+    color: var(--plum);
+    text-align: center;
+  }
+
+  /* ── SCREEN 4 – WISH ── */
+  #s4 { background: var(--soft); }
+  .wish-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 36px 32px;
+    max-width: 480px;
+    box-shadow: 0 8px 40px rgba(61,26,39,.1);
+    margin: 24px 0;
+    text-align: left;
+    position: relative;
+  }
+  .wish-card::before {
+    content: '❝';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: var(--blush);
+    position: absolute;
+    top: -10px; left: 18px;
+    line-height: 1;
+  }
+  .wish-card p { padding-left: 12px; }
+
+  /* ── SCREEN 5 – FINAL ── */
+  #s5 { background: var(--plum); color: #fff; }
+  #s5 h1 { color: var(--gold); }
+  #s5 h1 em { color: #fff; }
+  #s5 p { color: rgba(255,255,255,.75); }
+  .signature {
+    margin-top: 40px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--blush);
+  }
+  .signature span { color: var(--gold); font-style: normal; font-weight: 700; }
+
+  /* ── CONFETTI ── */
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    top: -20px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+    z-index: 999;
+  }
+  @keyframes confettiFall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── PROGRESS DOTS ── */
+  .dots {
+    display: flex; gap: 8px;
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    z-index: 10;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--blush);
+    transition: background .3s, transform .3s;
+  }
+  .dot.active { background: var(--rose); transform: scale(1.3); }
+
+  .spacer { height: 20px; }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- PROGRESS DOTS -->
+<div class="dots">
+  <div class="dot active" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
+  <div class="dot" id="dot3"></div>
+  <div class="dot" id="dot4"></div>
+  <div class="dot" id="dot5"></div>
+</div>
+
+<!-- ══ SCREEN 1 – INÍCIO ══ -->
+<section class="screen active" id="s1">
+  <div class="big-emoji">🎂</div>
+  <div class="eyebrow">Uma surpresinha especial</div>
+  <h1>Oi, lindinha.<br><em>Tem algo aqui pra você.</em></h1>
+  <div class="spacer"></div>
+  <p>Clica aí pra começar essa experiência que preparei com muito carinho. Prometo que vale a pena 💕</p>
+  <button class="btn" onclick="goTo(2)">Começar →</button>
+</section>
+
+<!-- ══ SCREEN 2 – PERGUNTA ══ -->
+<section class="screen" id="s2">
+  <div class="eyebrow">Só pra aquecer</div>
+  <h2>Como você prefere ser<br>paparicada hoje?</h2>
+  <div class="options" id="opts">
+    <button class="opt-btn" onclick="pickOpt(this)">🍰 Com bolo e vela</button>
+    <button class="opt-btn" onclick="pickOpt(this)">💌 Com carta de amor</button>
+    <button class="opt-btn" onclick="pickOpt(this)">🌹 Com flores demais</button>
+    <button class="opt-btn" onclick="pickOpt(this)">🥂 Com brinde especial</button>
+  </div>
+  <button class="btn" id="nextBtn2" onclick="goTo(3)" style="display:none">Continuar →</button>
+</section>
+
+<!-- ══ SCREEN 3 – MEMÓRIAS ══ -->
+<section class="screen" id="s3">
+  <div class="eyebrow">Momentos que fazem tudo valer</div>
+  <h2>Cada dia com você<br>é um presente.</h2>
+  <div class="polaroid-wrap">
+    <div class="polaroid">
+      <div class="face">🌅</div>
+      <div class="caption">amanheceres juntas</div>
+    </div>
+    <div class="polaroid">
+      <div class="face">🐾</div>
+      <div class="caption">bagunças e risadas</div>
+    </div>
+    <div class="polaroid">
+      <div class="face">🌙</div>
+      <div class="caption">noites que nunca acabam</div>
+    </div>
+  </div>
+  <p>E tem muito mais por vir. Muitos anos, muitas histórias.</p>
+  <button class="btn" onclick="goTo(4)">Continuar →</button>
+</section>
+
+<!-- ══ SCREEN 4 – MENSAGEM ══ -->
+<section class="screen" id="s4">
+  <div class="eyebrow">Do fundo do coração</div>
+  <div class="wish-card">
+    <p>
+      Hoje é o dia em que o mundo ganhou você — e eu fico pensando como tive sorte de
+      cruzar o meu caminho com o seu. Você ilumina tudo ao redor sem nem perceber.
+      <br><br>
+      Que esse aniversário seja tão especial quanto você é pra mim. Que venham muitos bolos,
+      muitas risadas, e muita gente que te ama do jeito que você merece.
+      <br><br>
+      Feliz aniversário, meu amor. 🎂✨
+    </p>
+  </div>
+  <button class="btn" onclick="goTo(5)">Ver o grand finale 🎉</button>
+</section>
+
+<!-- ══ SCREEN 5 – FINAL ══ -->
+<section class="screen" id="s5">
+  <div class="big-emoji" style="filter:drop-shadow(0 0 20px rgba(242,201,76,.5))">🎉</div>
+  <h1><em>Feliz</em><br>Aniversário!</h1>
+  <div class="spacer"></div>
+  <p>Hoje e sempre, você merece todo o amor e alegria do mundo.</p>
+  <div class="signature">com amor, <span>da sua namorada Pat</span> 💕</div>
+  <div class="spacer"></div>
+  <button class="btn ghost" onclick="restart()" style="margin-top:8px; color:#F9C8D2; border-color:#F9C8D2;">Recomeçar do início ↺</button>
+</section>
+
+<script>
+  let currentScreen = 1;
+  const total = 5;
+
+  function goTo(n) {
+    document.getElementById('s' + currentScreen).classList.remove('active');
+    document.getElementById('dot' + currentScreen).classList.remove('active');
+    currentScreen = n;
+    document.getElementById('s' + n).classList.add('active');
+    document.getElementById('dot' + n).classList.add('active');
+    if (n === 5) {
+      launchConfetti();
+      setTimeout(launchConfetti, 700);
+      setTimeout(launchConfetti, 1400);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function pickOpt(el) {
+    document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('nextBtn2').style.display = 'inline-block';
+  }
+
+  function restart() {
+    document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('nextBtn2').style.display = 'none';
+    goTo(1);
+  }
+
+  // ── Floating hearts ──
+  const heartsBg = document.getElementById('heartsBg');
+  const emojis = ['💕','💖','✨','🌸','💗','🌹','💝'];
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'heart-float';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.fontSize = (.8 + Math.random() * 1.2) + 'rem';
+    el.style.animationDuration = (6 + Math.random() * 10) + 's';
+    el.style.animationDelay = (Math.random() * 12) + 's';
+    heartsBg.appendChild(el);
+  }
+
+  // ── Confetti ──
+  function launchConfetti() {
+    const colors = ['#E8556D','#F2C94C','#9B59B6','#3498DB','#F9C8D2','#fff'];
+    for (let i = 0; i < 60; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.width = (6 + Math.random() * 10) + 'px';
+      c.style.height = (6 + Math.random() * 10) + 'px';
+      c.style.borderRadius = Math.random() > .5 ? '50%' : '2px';
+      c.style.animationDuration = (2 + Math.random() * 3) + 's';
+      c.style.animationDelay = Math.random() * .8 + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4500);
+    }
+  }
+</script>
+</body>
+</html>
